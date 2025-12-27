@@ -52,7 +52,7 @@ index_static.html
 
 | Soubor | Popis |
 |--------|-------|
-| `index_static.html` | Hlavní portfolio|
+| `weeb.html` | Hlavní portfolio|
 | `README.md` | Tento soubor |
 
 ## 👤 Autor

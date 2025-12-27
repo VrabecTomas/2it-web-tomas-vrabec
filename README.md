@@ -1,6 +1,7 @@
 # Portfolio - Tomáš Vrabec
 
-## Popis projektu
+## 📋Popis projektu
+
 Moderní jednostránkové portfolio s animovaným pozadím galaxie/černé díry a dynamickým přepínačem barevných témat. Web prezentuje mé dovednosti jako webového vývojáře.
 
 ## 🛠️ Použité technologie

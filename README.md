@@ -12,8 +12,6 @@ Moderní jednostránkové portfolio s animovaným pozadím galaxie/černé díry
 | **JavaScript** | Částicové animace, přepínač témat |
 | **Google Fonts** | Typografie (Outfit, Space Mono) |
 
-**Knihovny:** Žádné externí knihovny - čistý vanilla kód.
-
 ## Návod na spuštění
 
 ```bash

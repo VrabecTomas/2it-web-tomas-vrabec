@@ -46,7 +46,7 @@ index_static.html
 2. **Částicový systém** - 80 plovoucích částic reagujících na barvu tématu  
 3. **Přepínač témat** - 4 barevná schémata měnící celý web okamžitě
 4. **Responsivita** - Funguje na všech zařízeních bez scrollování
-5. ** Výkon** - Žádné knihovny = rychlé načítání
+5. **Výkon** - Žádné knihovny = rychlé načítání
 
 ## 📁 Struktura souborů
 

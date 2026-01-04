@@ -3,7 +3,7 @@
 ##  Popis projektu
 Moderní jednostránkové portfolio s animovaným pozadím.  Web prezentuje mé dovednosti jako webového vývojáře.
 
-## 🛠️ Seznam použitých technologií a knihoven
+##  Seznam použitých technologií a knihoven
 
 Tento projekt byl vytvořen s důrazem na čistý kód a maximální výkon
 
@@ -28,7 +28,7 @@ Tento projekt byl vytvořen s důrazem na čistý kód a maximální výkon
 web.html
 ```
 
-## ⭐ Na co jsem nejvíce hrdý
+## Na co jsem nejvíce hrdý
 
  **Animace a grafika** - celkový přehled
 

@@ -43,6 +43,3 @@ web.html
 
 **Tomáš Vrabec**  
 GitHub: [@VrabecTomas](https://github.com/VrabecTomas)
-
----
-© 2025 Tomáš Vrabec

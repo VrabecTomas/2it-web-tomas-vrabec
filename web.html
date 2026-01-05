@@ -582,10 +582,18 @@
             .info h1 { font-size: 1.8rem; }
             .buttons { flex-direction: column; }
             .black-hole-container { width: 300px; height: 300px; } /* Scale down on mobile */
+            .light-cursor { display: none; } /* Hide custom cursor on mobile */
         }
+
+        /* --- NEW EFFECTS --- */
+        
+
     </style>
 </head>
 <body>
+    <!-- Light Cursor Element -->
+    <div class="light-cursor" id="lightCursor"></div>
+
     <!-- Particle Background -->
     <canvas id="particles"></canvas>
     
@@ -651,8 +659,8 @@
                 <!-- WORK SECTION -->
                 <h3 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; margin-top: 30px; color: var(--text-muted);" data-key="projectsTitle">Featured Work</h3>
                 <div class="buttons" style="margin-bottom: 30px;">
-                    <button onclick="openModal()" class="btn" data-key="projectsBtn" style="border: 1px solid var(--primary-color); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);">
-                         Projects
+                    <button onclick="openModal()" class="btn" style="border: 1px solid var(--primary-color); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);">
+                         <span data-key="projectsBtn">Projects</span>
                     </button>
                 </div>
 
@@ -692,16 +700,16 @@
                 <div class="project-grid">
 
                     <a href="color_game.html" target="_blank" class="project-card">
-                        <span class="project-title">Color Match Game </span>
-                        <p class="project-desc">RGB color matching game.<br><span style="color: #00ff88; font-size: 0.8rem;">HTML + CSS + JS</span></p>
+                        <span class="project-title" data-key="proj1Title">Color Match Game</span>
+                        <p class="project-desc"><span data-key="proj1Desc">RGB color matching game.</span><br><span style="color: #00ff88; font-size: 0.8rem;">HTML + CSS + JS</span></p>
                     </a>
                     <a href="GameofLive.html" target="_blank" class="project-card">
-                        <span class="project-title">Game of Life </span>
-                        <p class="project-desc">Cellular automation simulation.<br><span style="color: #00ff88; font-size: 0.8rem;">HTML + CSS + JS</span></p>
+                        <span class="project-title" data-key="proj2Title">Game of Life</span>
+                        <p class="project-desc"><span data-key="proj2Desc">Cellular automation simulation.</span><br><span style="color: #00ff88; font-size: 0.8rem;">HTML + CSS + JS</span></p>
                     </a>
                     <a href="minesweeper.html" target="_blank" class="project-card">
-                        <span class="project-title">Minesweeper </span>
-                        <p class="project-desc">Console game that solves itself automatically.<br><span style="color: #00f3ff; font-size: 0.8rem;">Python + OOP</span></p>
+                        <span class="project-title" data-key="proj3Title">Minesweeper</span>
+                        <p class="project-desc"><span data-key="proj3Desc">Console game that solves itself automatically.</span><br><span style="color: #ffa502; font-size: 0.8rem;">Python + OOP</span></p>
                     </a>
                 </div>
             </div>
@@ -719,12 +727,28 @@
         event.target.classList.add('active');
     }
     
-    // MOUSE SPOTLIGHT
+    // MOUSE SPOTLIGHT & LIGHT CURSOR
+    const lightCursor = document.getElementById('lightCursor');
+
     document.addEventListener('mousemove', (e) => {
         const x = e.clientX;
         const y = e.clientY;
+        
+        // Background Spotlight
         document.body.style.setProperty('--x', x + 'px');
         document.body.style.setProperty('--y', y + 'px');
+        
+        // Move Light Cursor
+        if (lightCursor) {
+            lightCursor.style.left = x + 'px';
+            lightCursor.style.top = y + 'px';
+        }
+    });
+
+    // Hover interactions for Cursor
+    document.querySelectorAll('a, button, .project-card, .skill').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
     });
 
     // PARTICLES
@@ -832,11 +856,10 @@
             effects: "Effects",
             particles: "Particles",
             blackHole: "Black Hole",
-            blackHole: "Black Hole",
             description: "IT Student & Web Developer. Passionate about modern design, AI, and turning ideas into digital reality.",
             skillRespons: "Responsive",
             contactHeader: "Contact Me",
-            projectsBtn: "📂 Projects",
+            projectsBtn: "Projects",
             projectsTitle: "Selected Projects",
             quickInfo: "Quick Info",
             locationLabel: "Location",
@@ -847,7 +870,13 @@
             expValue: "Student",
             statusLabel: "Status",
             statusValue: "● Active",
-            footer: "© 2025 Tomáš Vrabec. No libraries used."
+            footer: "© 2025 Tomáš Vrabec. No libraries used.",
+            proj1Title: "Color Match Game",
+            proj1Desc: "RGB color matching game.",
+            proj2Title: "Game of Life",
+            proj2Desc: "Cellular automation simulation.",
+            proj3Title: "Minesweeper",
+            proj3Desc: "Console game that solves itself automatically."
         },
         cs: {
             language: "Jazyk",
@@ -858,7 +887,7 @@
             description: "Student IT a webový vývojář. Zapálený pro moderní design, AI a měnění nápadů v digitální realitu.",
             skillRespons: "Responzivita",
             contactHeader: "Napište mi",
-            projectsBtn: " Projekty",
+            projectsBtn: "Projekty",
             projectsTitle: "Vybrané Projekty",
             quickInfo: "Rychlé Info",
             locationLabel: "Lokace",
@@ -869,7 +898,13 @@
             expValue: "Student",
             statusLabel: "Stav",
             statusValue: "● Aktivní",
-            footer: "© 2025 Tomáš Vrabec. Žádné knihovny."
+            footer: "© 2025 Tomáš Vrabec. Žádné knihovny.",
+            proj1Title: "Hra Míchání Barev",
+            proj1Desc: "Hra na hádání RGB barev.",
+            proj2Title: "Hra Života",
+            proj2Desc: "Simulace buněčného automatu.",
+            proj3Title: "Hledání Min",
+            proj3Desc: "Konzolová hra, která se řeší sama."
         }
     };
 

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Match Game - Level Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #00d4ff;
+            --danger-color: #ff4d4d;
+            --success-color: #00ff88;
+            --panel-bg: #1e1e1e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0f1a 100%);
+            user-select: none; /* Prevent text selection */
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            border: 2px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- Top Bar --- */
+        .top-bar {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            height: 80px;
+        }
+
+        .stat-box {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+            font-weight: bold;
+        }
+
+        /* HP Bar */
+        .hp-container {
+            width: 100%;
+            height: 15px;
+            background: #111;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: auto;
+            border: 1px solid #333;
+        }
+
+        .hp-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #ff4d4d, #ffaa00, #00ff88);
+            transition: width 0.2s linear;
+        }
+
+        /* Time & Level */
+        .value-display {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+            font-family: monospace;
+        }
+
+        /* --- Main Area --- */
+        .main-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #252525;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+
+        /* Scribble Background Effect (CSS Pattern) */
+        .main-area::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.05;
+            background-image: repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .circle-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        /* Outer Ring (User Color) */
+        .user-ring {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 25px solid #888; /* Dynamic */
+            box-sizing: border-box;
+            transition: border-color 0.1s;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+
+        /* Inner Circle (Target Color) */
+        .target-circle {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            background-color: #555; /* Dynamic */
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Removed inset for color accuracy */
+        }
+
+        /* --- Controls --- */
+        .controls-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1.2fr; /* R, G, B, SET */
+            gap: 15px;
+            height: 160px;
+        }
+
+        .control-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .arrow-btn {
+            width: 100%;
+            height: 40px;
+            background: none;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.1s;
+            position: relative;
+        }
+        
+        .arrow-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Triangle Icons using CSS borders */
+        .arrow-up::after {
+            content: '';
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid currentColor;
+        }
+
+        .arrow-down::after {
+            content: '';
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid currentColor;
+        }
+
+        .col-val {
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        /* Color Specific Styles */
+        .col-red .arrow-btn { border-color: #ff4d4d; color: #ff4d4d; }
+        .col-red .col-val { color: #ff4d4d; }
+        
+        .col-green .arrow-btn { border-color: #00ff88; color: #00ff88; }
+        .col-green .col-val { color: #00ff88; }
+
+        .col-blue .arrow-btn { border-color: #00d4ff; color: #00d4ff; }
+        .col-blue .col-val { color: #00d4ff; }
+
+        /* SET Button */
+        .set-btn {
+            width: 100%;
+            height: 100%;
+            background: #333;
+            border: 2px solid #fff;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #000;
+        }
+
+        .set-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #000;
+        }
+
+        .set-btn:hover {
+            background: #444;
+        }
+
+        /* --- Overlay --- */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        #overlay.visible { opacity: 1; pointer-events: all; }
+
+        .overlay-content {
+            text-align: center;
+            background: #222;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #444;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .overlay-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .overlay-score {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #ccc;
+        }
+
+        .restart-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .restart-btn:hover { transform: scale(1.05); }
+
+        /* Shake Animation */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .shake { animation: shake 0.3s ease-in-out; }
+
+        /* Next Color Preview */
+        .next-color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #555;
+            border: 2px solid #888;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            margin: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="stat-box">
+                <span class="label">HP</span>
+                <div class="hp-container">
+                    <div class="hp-fill" id="hp-bar"></div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="label">TIME</span>
+                <div class="value-display" id="time-display">15</div>
+            </div>
+            <div class="stat-box">
+                <span class="label">NEXT</span>
+                <div class="next-color-preview" id="next-color-display"></div>
+            </div>
+        </div>
+
+        <!-- Main Area -->
+        <div class="main-area" id="main-area">
+            <div class="circle-container">
+                <div class="user-ring" id="user-ring"></div>
+                <div class="target-circle" id="target-circle"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-area">
+            <!-- Red -->
+            <div class="control-col col-red">
+                <button class="arrow-btn arrow-up" onclick="adjustColor('r', 10)"></button>
+                <div class="col-val" id="val-r">0</div>
+                <button class="arrow-btn arrow-down" onclick="adjustColor('r', -10)"></button>
+            </div>
+            <!-- Green -->
+            <div class="control-col col-green">
+                <button class="arrow-btn arrow-up" onclick="adjustColor('g', 10)"></button>
+                <div class="col-val" id="val-g">0</div>
+                <button class="arrow-btn arrow-down" onclick="adjustColor('g', -10)"></button>
+            </div>
+            <!-- Blue -->
+            <div class="control-col col-blue">
+                <button class="arrow-btn arrow-up" onclick="adjustColor('b', 10)"></button>
+                <div class="col-val" id="val-b">0</div>
+                <button class="arrow-btn arrow-down" onclick="adjustColor('b', -10)"></button>
+            </div>
+            <!-- SET -->
+            <button class="set-btn" id="set-btn">SET</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="overlay-content">
+            <div class="overlay-title" id="overlay-title">GAME OVER</div>
+            <button class="restart-btn" onclick="initGame()">RESTART</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let targetColor = { r: 0, g: 0, b: 0 };
+        let nextTargetColor = { r: 0, g: 0, b: 0 };
+        let userColor = { r: 0, g: 0, b: 0 };
+        let level = 1;
+        let maxTime = 30;
+        let timeLeft = 30;
+        let isPlaying = false;
+        let gameInterval;
+        let lastTime = 0;
+
+        // Elements
+        const hpBar = document.getElementById('hp-bar');
+        const timeDisplay = document.getElementById('time-display');
+        const nextColorDisplay = document.getElementById('next-color-display');
+        const userRing = document.getElementById('user-ring');
+        const targetCircle = document.getElementById('target-circle');
+        const valR = document.getElementById('val-r');
+        const valG = document.getElementById('val-g');
+        const valB = document.getElementById('val-b');
+        const overlay = document.getElementById('overlay');
+        const overlayTitle = document.getElementById('overlay-title');
+        const mainArea = document.getElementById('main-area');
+        const setBtn = document.getElementById('set-btn');
+
+        function generateRandomColor() {
+            return {
+                r: Math.floor(Math.random() * 256),
+                g: Math.floor(Math.random() * 256),
+                b: Math.floor(Math.random() * 256)
+            };
+        }
+
+        function initGame() {
+            level = 1;
+            timeLeft = 20; // Start with 20s
+            maxTime = 20;
+            isPlaying = true;
+            overlay.classList.remove('visible');
+            
+            // Generate initial next color so we have something to transition TO
+            nextTargetColor = generateRandomColor();
+            
+            // Randomize first color (this will grab nextTargetColor and generate a new one)
+            nextLevel();
+            
+            // Reset User Color
+            userColor = { r: 127, g: 127, b: 127 };
+            updateUI();
+
+            // Loop
+            if (gameInterval) cancelAnimationFrame(gameInterval);
+            lastTime = performance.now();
+            gameLoop(lastTime);
+        }
+
+        function nextLevel() {
+            // Set current target to the PREVIOUS "next" color (Deep Copy)
+            targetColor = { ...nextTargetColor };
+            
+            // Generate NEW next color
+            nextTargetColor = generateRandomColor();
+            
+            // Update Target UI
+            targetCircle.style.backgroundColor = `rgb(${targetColor.r}, ${targetColor.g}, ${targetColor.b})`;
+            
+            // Update Next Color UI
+            nextColorDisplay.style.backgroundColor = `rgb(${nextTargetColor.r}, ${nextTargetColor.g}, ${nextTargetColor.b})`;
+        }
+
+        function adjustColor(channel, amount) {
+            if (!isPlaying) return;
+            userColor[channel] = Math.max(0, Math.min(255, userColor[channel] + amount));
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update Text
+            valR.textContent = userColor.r;
+            valG.textContent = userColor.g;
+            valB.textContent = userColor.b;
+
+            // Update Ring
+            userRing.style.borderColor = `rgb(${userColor.r}, ${userColor.g}, ${userColor.b})`;
+        }
+
+        function checkMatch() {
+            if (!isPlaying) return;
+
+            // Calculate Distance
+            const dr = targetColor.r - userColor.r;
+            const dg = targetColor.g - userColor.g;
+            const db = targetColor.b - userColor.b;
+            const distance = Math.sqrt(dr*dr + dg*dg + db*db);
+
+            // Thresholds
+            // Max distance ~442. 
+            // Good match < 30?
+            const threshold = 40; 
+
+            if (distance < threshold) {
+                // Success
+                level++;
+                // Bonus Time
+                timeLeft += 5;
+                if (timeLeft > 30) timeLeft = 30; // Cap
+                
+                // Visual Feedback
+                flashSuccess();
+                nextLevel();
+            } else {
+                // Fail
+                // Penalty Time
+                timeLeft -= 3;
+                mainArea.classList.add('shake');
+                setTimeout(() => mainArea.classList.remove('shake'), 300);
+            }
+        }
+
+        function flashSuccess() {
+            mainArea.style.background = '#004400';
+            setTimeout(() => {
+                mainArea.style.background = '#252525';
+            }, 200);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            overlayTitle.textContent = "GAME OVER";
+            overlay.classList.add('visible');
+        }
+
+        function gameLoop(timestamp) {
+            if (!isPlaying) return;
+
+            const dt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            // Timer Logic
+            timeLeft -= dt;
+            
+            if (timeLeft <= 0) {
+                timeLeft = 0;
+                gameOver();
+            }
+
+            // Update Displays
+            timeDisplay.textContent = Math.ceil(timeLeft);
+            
+            // HP Bar Logic (Visual representation of time)
+            // Let's say full bar = 30s (or maxTime)
+            const hpPercent = (timeLeft / 30) * 100;
+            hpBar.style.width = hpPercent + '%';
+            
+            // Color shift HP bar
+            if (hpPercent < 20) hpBar.style.background = '#ff4d4d';
+            else if (hpPercent < 50) hpBar.style.background = '#ffaa00';
+            else hpBar.style.background = 'linear-gradient(90deg, #ff4d4d, #ffaa00, #00ff88)';
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Listeners
+        setBtn.addEventListener('click', checkMatch);
+        
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!isPlaying) return;
+            switch(e.key) {
+                case 'ArrowUp': adjustColor('g', 10); break; // Just mapping arrows to something? Maybe not intuitive.
+                case 'Enter': e.preventDefault(); checkMatch(); break;
+            }
+        });
+
+        // Start
+        initGame();
+
+    </script>
+</body>
+</html>

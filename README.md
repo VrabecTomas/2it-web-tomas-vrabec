@@ -30,7 +30,7 @@ web.html
 1.  **[🌐 Otevřít online (GitHub Pages)](https://vrabectomas.github.io/2it-web-vrabec-tomas/)**  
     *(Pro funkčnost musí být projekt nahrán na GitHub a zapnuto GitHub Pages)*
 
-2.  **[📂 Otevřít lokálně (index.html)](index.html)**  
+2.  **[📂 Otevřít lokálně (web.html)](web.html)**  
     *(Pokud jste si stáhli soubory do počítače)*
 
 

@@ -30,7 +30,7 @@ web.html
 
 [>> Otevřít Portfolio (web.html) <<](web.html)
 
-## ⭐ Na co jsem nejvíce hrdý
+##  Na co jsem nejvíce hrdý
 
  **Animace** - celkový přehled
 
@@ -41,7 +41,7 @@ web.html
 | `web.html` | **Hlavní portfolio**
 | `README.md` | Tento soubor |
 
-## 👤 Autor
+##  Autor
 
 **Tomáš Vrabec**  
 GitHub: [@VrabecTomas](https://github.com/VrabecTomas)

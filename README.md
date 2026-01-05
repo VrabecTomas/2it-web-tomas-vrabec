@@ -32,7 +32,7 @@ web.html
 
 ## ⭐ Na co jsem nejvíce hrdý
 
- **Animace a přehled**
+ **Animace** - celkový přehled
 
 ## 📁 Struktura souborů
 

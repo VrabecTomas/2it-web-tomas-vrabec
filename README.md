@@ -27,8 +27,12 @@ Tento projekt byl vytvořen s důrazem na čistý kód a maximální výkon bez 
 
 web.html
 ```
+1.  **[🌐 Otevřít online (GitHub Pages)](https://vrabectomas.github.io/2it-web-vrabec-tomas/)**  
+    *(Pro funkčnost musí být projekt nahrán na GitHub a zapnuto GitHub Pages)*
 
-[>> Otevřít Live Portfolio <<](https://vrabectomas.github.io/2it-web-vrabec-tomas/)
+2.  **[📂 Otevřít lokálně (index.html)](index.html)**  
+    *(Pokud jste si stáhli soubory do počítače)*
+
 
 
 ##  Na co jsem nejvíce hrdý
@@ -45,7 +49,3 @@ web.html
 ##  Autor
 
 **Tomáš Vrabec**  
-GitHub: [@VrabecTomas](https://github.com/VrabecTomas)
-
----
-© 2025 Tomáš Vrabec
